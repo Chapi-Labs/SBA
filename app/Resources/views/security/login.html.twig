@@ -9,6 +9,9 @@
           <input type="text" id="usename" class="form-control" placeholder="Correo" name="_username" value="{{ last_username }}" required autofocus>
           <label for="password" class="sr-only">Contraseña</label>
           <input type="password"  id="password" name="_password" class="form-control" placeholder="Contraseña"  required>
+           <input type="hidden" name="_csrf_token"
+        value="{{ csrf_token('authenticate') }}"
+    >
         {% if error %}
             <p><stong>{{ error.messageKey|trans(error.messageData, 'security') }}</stong></p>
         {% endif %}
