@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+       <meta name="author" content="Newton Labs">
+       <meta name="viewport" content="width=device-width">
+        <title>{% block title %}SBA{% endblock %}</title>
+        {% block stylesheets %}{% endblock %}
+        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+        <link rel="stylesheet" href="{{asset('css/bootstrap.min.css')}}">
+         <link rel="stylesheet" href="{{asset('css/styles.css')}}">
+    </head>
+    <body>
+        {% block body %}{% endblock %}
+        <footer class="footer">
+          <div class="container">
+            <span class="text-muted">Chapi Labs</span>
+          </div>
+        </footer>
+        {% block javascripts %}{% endblock %}
+        <script src="{{asset('js/jquery.min.js')}}"></script>
+        <script src="{{asset('js/bootstrap.min.js')}}"></script>
+    </body>
+</html>

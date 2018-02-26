@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+ <form class="form-signin" action="{{ path('login') }}" method="post">
+      <!-- <img class="mb-4" src="https://getbootstrap.com/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72"> -->
+      <h1 class="h3 mb-3 font-weight-normal" style="text-align: center">SBA</h1>
+      <label for="username" class="sr-only">Correo electrónico</label>
+          <input type="text" id="usename" class="form-control" placeholder="Correo" name="_username" value="{{ last_username }}" required autofocus>
+          <label for="password" class="sr-only">Contraseña</label>
+          <input type="password"  id="password" name="_password" class="form-control" placeholder="Contraseña"  required>
+        {% if error %}
+            <p><stong>{{ error.messageKey|trans(error.messageData, 'security') }}</stong></p>
+        {% endif %}
+      <button class="btn btn-lg btn-primary btn-block" type="submit">Iniciar Sesión</button>
+    </form>
+{% endblock %}
