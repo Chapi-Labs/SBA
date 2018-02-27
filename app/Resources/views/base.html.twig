@@ -20,6 +20,9 @@
         <footer class="footer">
           <div class="container">
             <img src="{{asset('img/logo.png')}}" width="100"><span class="text-muted">&copy; {{ 'now'|date('Y') }}</span>
+            {% if app.user %}
+                  <a href="{{path('logout')}}" class="">Cerrar Sesión</a>
+            {% endif %}
           </div>
         </footer>
         {% block javascripts %}{% endblock %}

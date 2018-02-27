@@ -14,7 +14,6 @@ class AppKernel extends Kernel
             new Symfony\Bundle\TwigBundle\TwigBundle(),
             new Symfony\Bundle\MonologBundle\MonologBundle(),
             new Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle(),
-            new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new AppBundle\AppBundle(),
 
@@ -22,7 +21,7 @@ class AppKernel extends Kernel
             //dependencies
             new Liuggio\ExcelBundle\LiuggioExcelBundle(),
             new cspoo\Swiftmailer\MailgunBundle\cspooSwiftmailerMailgunBundle(),
-            new Sentry\SentryBundle\SentryBundle(),
+            
 
         ];
 
