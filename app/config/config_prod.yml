@@ -11,13 +11,22 @@ imports:
 monolog:
     handlers:
         main:
-            type: fingers_crossed
-            action_level: error
-            handler: nested
-        nested:
-            type: stream
-            path: '%kernel.logs_dir%/%kernel.environment%.log'
+            type:         fingers_crossed
+            action_level: critical
+            handler:      grouped
+        grouped:
+            type:    group
+            members: [streamed, buffered]
+        streamed:
+            type:  stream
+            path:  '%kernel.logs_dir%/%kernel.environment%.log'
             level: debug
-        console:
-            type: console
-            process_psr_3_messages: false
+        buffered:
+            type:    buffer
+            handler: swift
+        swift:
+            type:       swift_mailer
+            from_email: 'soporte@chapilabs.com.gt'
+            to_email:   'pablodiaz@chapilabs.com'
+            subject:    SBA Error!
+            level:      debug
