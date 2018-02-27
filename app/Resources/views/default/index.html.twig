@@ -55,8 +55,30 @@
           </div>
         </div>
       </div>
+        
       {% if cant_email is defined and cant_pdf is defined %}
         <h4> Se han enviado {{cant_email}} correos con {{cant_pdf}} PDFs en total.</h4>
+        <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th scope="col">Cliente</th>
+                  <th scope="col">NIT</th>
+                  <th scope="col">Correos</th>
+                  <th scope="col">Cantidad Documentos enviados</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for client in data %}
+                <tr>
+                    <td>{{client.cliente}}</td>
+                    <td>{{client.nit}}</td>
+                    <td>{{client.email1}}, {{client.email2}}</td>
+                    <td>{{client.pdf|length}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
       {% endif %}
     </div>
     {{ form_end(form) }}

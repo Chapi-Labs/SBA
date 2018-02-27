@@ -45,7 +45,8 @@ class DefaultController extends Controller
                 'base_dir' => realpath($this->getParameter('kernel.project_dir')).DIRECTORY_SEPARATOR,
                 'form' => $form->createView(),
                 'cant_email' => $count,
-                'cant_pdf' => $countPDF
+                'cant_pdf' => $countPDF,
+                'data' => $valid 
             ]);
         }
         // replace this example code with whatever you need
@@ -65,8 +66,13 @@ class DefaultController extends Controller
             $pdfs = [];
             $nit = '';
             $email = '';
+            $cliente = '';
             foreach ($cellIterator as $cell) {
                 $data = $cell->getCalculatedValue();
+                 // nombre cliente
+                if ($columna === 0 && $count !== 0 && !empty($data)){
+                    $cliente = $data;
+                }
                 // NIT
                 if ($columna === 1 && $count !== 0 && !empty($data) && !empty($pdf)){
                     $pdfs = $this->buscarPDF($data, $pdf);
@@ -78,6 +84,7 @@ class DefaultController extends Controller
                     $email = $data;
                 }
                 if ($columna === 3 && $count !== 0 && !empty($pdfs)) {
+                    $pdfsWithEmail['cliente'] = $cliente;
                     $pdfsWithEmail['pdf'] = $pdfs;
                     $pdfsWithEmail['nit'] = strval($nit);
                     $pdfsWithEmail['email1'] = $email;
