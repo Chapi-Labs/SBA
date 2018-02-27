@@ -12,10 +12,14 @@
          <link rel="stylesheet" href="{{asset('css/styles.css')}}">
     </head>
     <body>
+
+        <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 header border-bottom box-shadow">
+          <h5 class="my-0 mr-md-auto font-weight-normal white">SBA Retenciones IVA e ISR </h5>
+    </div>
         {% block body %}{% endblock %}
         <footer class="footer">
           <div class="container">
-            <span class="text-muted">Chapi Labs</span>
+            <img src="{{asset('img/logo.png')}}" width="100"><span class="text-muted">&copy; {{ 'now'|date('Y') }}</span>
           </div>
         </footer>
         {% block javascripts %}{% endblock %}
