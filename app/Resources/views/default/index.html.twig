@@ -51,7 +51,7 @@
             <ul class="list-unstyled mt-3 mb-4">
                 {{form_row(form.message)}}
             </ul>
-            <button type="submit" class="btn btn-lg btn-block btn-primary">Procesar</button>
+            <button type="submit" class="btn btn-lg btn-block btn-primary">Enivar Correos</button>
           </div>
         </div>
       </div>
@@ -74,7 +74,10 @@
                 <tr>
                     <td>{{client.cliente}}</td>
                     <td>{{client.nit}}</td>
-                    <td>{{client.email1}}, {{client.email2}}</td>
+                    <td>{% for email in client.emails %}
+                            {{email}}, 
+                        {% endfor %}
+                    </td>
                     <td>{{client.pdf|length}}</td>
                 </tr>
                 {% endfor %}

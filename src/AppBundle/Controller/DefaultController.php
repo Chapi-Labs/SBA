@@ -25,7 +25,6 @@ class DefaultController extends Controller
              $worksheet = $excel->getSheet(0);
              $pdf = $uploader->getPDF();
              $valid =  $this->processData($worksheet, $pdf);
-            dump($valid);
             if (false !== $valid) {
                 $count = 0;
                 $countPDF = 0;
@@ -33,7 +32,7 @@ class DefaultController extends Controller
                     //message, email, files
                     $this->sendEmail(
                         $uploader->getMessage(),
-                        [ $email_client['email1'], $email_client['email2'] ], 
+                        $email_client['emails'],
                         $email_client['pdf']
                     );
                     $countPDF = $countPDF + sizeof($email_client['pdf']);
@@ -63,16 +62,17 @@ class DefaultController extends Controller
     {
         $count = 0;
         $finalPDF = [];
-        foreach ($worksheet->getRowIterator() as $row => $columns) {
-            $cellIterator = $columns->getCellIterator();
+        $rows = $worksheet->toArray();
+        foreach ($rows as $row) {
+            
             $columna = 0;
             $pdfs = [];
             $nit = '';
-            $email = '';
+            $emails = [];
             $cliente = '';
-            foreach ($cellIterator as $cell) {
-                $data = $cell->getCalculatedValue();
-                 // nombre cliente
+            foreach ($row as $column) {
+                $data = $column;
+                // nombre cliente
                 if ($columna === 0 && $count !== 0 && !empty($data)){
                     $cliente = $data;
                 }
@@ -81,20 +81,20 @@ class DefaultController extends Controller
                     $pdfs = $this->buscarPDF($data, $pdf);
                     $nit = $data;
                 }
-                //correo 1
+                //correos
                 $pdfsWithEmail = [];
-                if ($columna === 2 && $count !== 0) {
-                    $email = $data;
+                if ($columna >= 2 && $count !== 0) {
+                    if (filter_var($data, FILTER_VALIDATE_EMAIL) !== false) {
+                        $emails[] = $data;
+                    }
                 }
-                //correo 2
-                if ($columna === 3 && $count !== 0 && !empty($pdfs)) {
+                //final column
+                if ($columna === sizeof($row) - 1 && $count !== 0 && !empty($pdfs)) {
                     $pdfsWithEmail['cliente'] = $cliente;
                     $pdfsWithEmail['pdf'] = $pdfs;
                     $pdfsWithEmail['nit'] = strval($nit);
-                    $pdfsWithEmail['email1'] = $email;
-                    $pdfsWithEmail['email2'] = $data;
+                    $pdfsWithEmail['emails'] = $emails;
                     $finalPDF[] = $pdfsWithEmail;
-                    $columna++;
                 }
                 ++$columna;
             }
@@ -146,14 +146,12 @@ class DefaultController extends Controller
         $message
             ->setSubject($subject)
             ->setFrom([$fromEmail => 'SBA'])
-            ->setTo($emailTo[0])
+            ->setTo($emailTo)
+            ->setReplyTo('dperez@diazreyes.com')
             ->setBody($this->renderView('email/email.html.twig', [ 'body' => ($body)]), 'text/html')
             ->setContentType('text/html')
         ;
-        if ($emailTo[1] !== null) {
-            $message->setBcc($emailTo[1]);
-        }
 
-        $this->get('mailer')->send($message);
+       $this->get('mailer')->send($message);
     }
 }
