@@ -18,15 +18,15 @@ class DefaultController extends Controller
         $uploader = new Uploader();
         $form = $this->createForm(UploadType::class, $uploader);
         $form->handleRequest($request);
-
+        $error = '';
         if ($form->isSubmitted() && $form->isValid()) {
             
             $excel = $this->get('phpexcel')->createPHPExcelObject($uploader->getExcel());
              $worksheet = $excel->getSheet(0);
              $pdf = $uploader->getPDF();
              $valid =  $this->processData($worksheet, $pdf);
-            
-            if ($valid) {
+            dump($valid);
+            if (false !== $valid) {
                 $count = 0;
                 $countPDF = 0;
                 foreach($valid as $email_client) {
@@ -39,20 +39,23 @@ class DefaultController extends Controller
                     $countPDF = $countPDF + sizeof($email_client['pdf']);
                     $count++;
                 }
-            }
-             // replace this example code with whatever you need
-        return $this->render('default/index.html.twig', [
+                // replace this example code with whatever you need
+                return $this->render('default/index.html.twig', [
                 'base_dir' => realpath($this->getParameter('kernel.project_dir')).DIRECTORY_SEPARATOR,
                 'form' => $form->createView(),
                 'cant_email' => $count,
                 'cant_pdf' => $countPDF,
                 'data' => $valid 
-            ]);
+                ]);
+            }
+            $error = 'El excel no contiene las 4 columnas obligatorias';
+           
         }
         // replace this example code with whatever you need
         return $this->render('default/index.html.twig', [
             'base_dir' => realpath($this->getParameter('kernel.project_dir')).DIRECTORY_SEPARATOR,
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'error_message' => $error
         ]);
     }
 
@@ -83,6 +86,7 @@ class DefaultController extends Controller
                 if ($columna === 2 && $count !== 0) {
                     $email = $data;
                 }
+                //correo 2
                 if ($columna === 3 && $count !== 0 && !empty($pdfs)) {
                     $pdfsWithEmail['cliente'] = $cliente;
                     $pdfsWithEmail['pdf'] = $pdfs;
@@ -125,7 +129,7 @@ class DefaultController extends Controller
      */
     private function sendEmail($body, $emailTo, $files)
     {
-        $fromEmail = 'no-responder@sba.com';
+        $fromEmail = 'no-responder@email.chapilabs.com';
 
         $message = \Swift_Message::newInstance();
         foreach($files as $file) {

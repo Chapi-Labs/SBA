@@ -20,7 +20,7 @@ class AppKernel extends Kernel
             
             //dependencies
             new Liuggio\ExcelBundle\LiuggioExcelBundle(),
-            new cspoo\Swiftmailer\MailgunBundle\cspooSwiftmailerMailgunBundle(),
+            
             new Sentry\SentryBundle\SentryBundle(),
 
         ];

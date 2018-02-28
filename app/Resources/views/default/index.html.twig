@@ -16,7 +16,7 @@
             <h1 class="card-title pricing-card-title">Subir Excel con datos <small class="text-muted"></small></h1>
             <ul class="list-unstyled mt-3 mb-4">
               <li>Columas obligatorias</li>
-              <li>NIT, Cliente, Correo1 y Correo2</li>
+              <li>Cliente, NIT, Correo1 y Correo2</li>
               <br>
               <br>
               <br>
@@ -55,7 +55,9 @@
           </div>
         </div>
       </div>
-        
+        {% if error_message is defined %}
+            <h3> {{error_message}}</h3>
+        {% endif %}
       {% if cant_email is defined and cant_pdf is defined %}
         <h4> Se han enviado {{cant_email}} correos con {{cant_pdf}} PDFs en total.</h4>
         <table class="table table-hover">
