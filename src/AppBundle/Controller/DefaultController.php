@@ -24,21 +24,29 @@ class DefaultController extends Controller
             $excel = $this->get('phpexcel')->createPHPExcelObject($uploader->getExcel());
              $worksheet = $excel->getSheet(0);
              $pdf = $uploader->getPDF();
-             $data =  $this->processData($worksheet, $pdf);
-             // clients with all data needed to email
-             $validClients = $data[0];
-             // clients without PDF
-             $invalidClients = $data[1];
+             $validClients =  $this->processData($worksheet, $pdf);
+             $invalidPDFs = [];
+             foreach($pdf as $individual_pdf) {
+                $found = false;
+                foreach($validClients as $client) {
+                    if (in_array($individual_pdf, $client['pdf'])) {
+                        $found = true;
+                    }
+                }
+                if ($found === false) {
+                    $invalidPDFs[] = $individual_pdf->getClientOriginalName();
+                }
+             }
             if ($validClients !== false) {
                 $count = 0;
                 $countPDF = 0;
                 foreach($validClients as $email_client) {
                     //message, email, files
-                    $this->sendEmail(
-                        $uploader->getMessage(),
-                        $email_client['emails'],
-                        $email_client['pdf']
-                    );
+                    // $this->sendEmail(
+                    //     $uploader->getMessage(),
+                    //     $email_client['emails'],
+                    //     $email_client['pdf']
+                    // );
                     $countPDF = $countPDF + sizeof($email_client['pdf']);
                     $count++;
                 }
@@ -49,7 +57,7 @@ class DefaultController extends Controller
                     'cant_email' => $count,
                     'cant_pdf' => $countPDF,
                     'data' => $validClients,
-                    'invalid_data' => $invalidClients,
+                    'invalid_data' => $invalidPDFs,
                 ]);
             }
             $error = 'El excel no contiene las 4 columnas obligatorias';
@@ -72,7 +80,6 @@ class DefaultController extends Controller
     {
         $count = 0;
         $clientsPDF = [];
-        $clientsWithoutPDF = [];
         $rows = $worksheet->toArray();
         foreach ($rows as $row) {
             
@@ -90,11 +97,6 @@ class DefaultController extends Controller
                 // NIT
                 if ($columna === 1 && $count !== 0 && !empty($data) && !empty($pdf)){
                     $pdfs = $this->buscarPDF($data, $pdf);
-                    if (empty($pdfs) === true) {
-                        $invalidClient['nit'] = strval($data);
-                        $invalidClient['cliente'] = $cliente;
-                        $clientsWithoutPDF[] = $invalidClient;
-                    }
                     $nit = $data;
                 }
                 //correos
@@ -120,7 +122,7 @@ class DefaultController extends Controller
             $columna = 0;
             ++$count;
         }
-        return [$clientsPDF, $clientsWithoutPDF];
+        return $clientsPDF;
     }
     /**
      * Find all the PDFS of a client
