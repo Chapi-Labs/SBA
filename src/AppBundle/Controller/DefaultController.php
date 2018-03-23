@@ -24,11 +24,15 @@ class DefaultController extends Controller
             $excel = $this->get('phpexcel')->createPHPExcelObject($uploader->getExcel());
              $worksheet = $excel->getSheet(0);
              $pdf = $uploader->getPDF();
-             $valid =  $this->processData($worksheet, $pdf);
-            if (false !== $valid) {
+             $data =  $this->processData($worksheet, $pdf);
+             // clients with all data needed to email
+             $validClients = $data[0];
+             // clients without PDF
+             $invalidClients = $data[1];
+            if ($validClients !== false) {
                 $count = 0;
                 $countPDF = 0;
-                foreach($valid as $email_client) {
+                foreach($validClients as $email_client) {
                     //message, email, files
                     $this->sendEmail(
                         $uploader->getMessage(),
@@ -40,11 +44,12 @@ class DefaultController extends Controller
                 }
                 // replace this example code with whatever you need
                 return $this->render('default/index.html.twig', [
-                'base_dir' => realpath($this->getParameter('kernel.project_dir')).DIRECTORY_SEPARATOR,
-                'form' => $form->createView(),
-                'cant_email' => $count,
-                'cant_pdf' => $countPDF,
-                'data' => $valid 
+                    'base_dir' => realpath($this->getParameter('kernel.project_dir')).DIRECTORY_SEPARATOR,
+                    'form' => $form->createView(),
+                    'cant_email' => $count,
+                    'cant_pdf' => $countPDF,
+                    'data' => $validClients,
+                    'invalid_data' => $invalidClients,
                 ]);
             }
             $error = 'El excel no contiene las 4 columnas obligatorias';
@@ -57,11 +62,17 @@ class DefaultController extends Controller
             'error_message' => $error
         ]);
     }
-
+    /**
+     * Function to group all pdfs with the emails of one client
+     * @param  ExcelType $worksheet Depedency type
+     * @param  Array of Files $pdf alld the PDFS uploaded
+     * @return Array with valid clients and invalid
+     */
     private function processData($worksheet, $pdf)
     {
         $count = 0;
-        $finalPDF = [];
+        $clientsPDF = [];
+        $clientsWithoutPDF = [];
         $rows = $worksheet->toArray();
         foreach ($rows as $row) {
             
@@ -79,6 +90,11 @@ class DefaultController extends Controller
                 // NIT
                 if ($columna === 1 && $count !== 0 && !empty($data) && !empty($pdf)){
                     $pdfs = $this->buscarPDF($data, $pdf);
+                    if (empty($pdfs) === true) {
+                        $invalidClient['nit'] = strval($data);
+                        $invalidClient['cliente'] = $cliente;
+                        $clientsWithoutPDF[] = $invalidClient;
+                    }
                     $nit = $data;
                 }
                 //correos
@@ -94,7 +110,7 @@ class DefaultController extends Controller
                     $pdfsWithEmail['pdf'] = $pdfs;
                     $pdfsWithEmail['nit'] = strval($nit);
                     $pdfsWithEmail['emails'] = $emails;
-                    $finalPDF[] = $pdfsWithEmail;
+                    $clientsPDF[] = $pdfsWithEmail;
                 }
                 ++$columna;
             }
@@ -104,9 +120,14 @@ class DefaultController extends Controller
             $columna = 0;
             ++$count;
         }
-        return $finalPDF;
+        return [$clientsPDF, $clientsWithoutPDF];
     }
-
+    /**
+     * Find all the PDFS of a client
+     * @param  string $nit  client identificator
+     * @param  UploadFile[] $pdfs PDFS
+     * @return UploadedFile[]
+     */
     private function buscarPDF($nit, $pdfs)
     {
         $result = [];
