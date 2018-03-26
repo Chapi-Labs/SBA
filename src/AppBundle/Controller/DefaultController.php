@@ -42,11 +42,11 @@ class DefaultController extends Controller
                 $countPDF = 0;
                 foreach($validClients as $email_client) {
                     //message, email, files
-                    // $this->sendEmail(
-                    //     $uploader->getMessage(),
-                    //     $email_client['emails'],
-                    //     $email_client['pdf']
-                    // );
+                    $this->sendEmail(
+                        $uploader->getMessage(),
+                        $email_client['emails'],
+                        $email_client['pdf']
+                    );
                     $countPDF = $countPDF + sizeof($email_client['pdf']);
                     $count++;
                 }
