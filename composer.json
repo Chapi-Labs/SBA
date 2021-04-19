@@ -20,7 +20,7 @@
         ]
     },
     "require": {
-        "php": ">=5.5.9",
+        "php": ">=5.5.9 <7.4",
         "doctrine/doctrine-bundle": "^1.6",
         "doctrine/orm": "^2.5",
         "easycorp/easyadmin-bundle": "^1.17",
