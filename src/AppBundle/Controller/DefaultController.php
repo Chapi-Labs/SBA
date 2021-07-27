@@ -170,10 +170,12 @@ class DefaultController extends Controller
             ->setSubject($subject)
             ->setFrom([$fromEmail => 'SBA'])
             ->setTo($emailTo)
-            ->setReplyTo('dperez@diazreyes.com')
+            ->setReplyTo('mpatal@diazreyes.com')
             ->setBody($this->renderView('email/email.html.twig', [ 'body' => ($body)]), 'text/html')
             ->setContentType('text/html')
         ;
+        $headers = $message->getHeaders();
+        $headers->addTextHeader('X-PM-Message-Stream', 'sba');
 
        $this->get('mailer')->send($message);
     }
