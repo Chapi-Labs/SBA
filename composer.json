@@ -25,7 +25,7 @@
         "doctrine/orm": "^2.5",
         "easycorp/easyadmin-bundle": "^1.17",
         "incenteev/composer-parameter-handler": "^2.0",
-        "liuggio/ExcelBundle": "^2.1",
+        "liuggio/excelbundle": "^2.1",
         "sensio/distribution-bundle": "^5.0.19",
         "sensio/framework-extra-bundle": "^5.0.0",
         "sentry/sentry-symfony": "^2.0",
