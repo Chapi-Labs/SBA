@@ -20,7 +20,7 @@
         ]
     },
     "require": {
-        "php": ">=5.5.9 <7.4",
+        "php": ">=5.5.9 <= 8.1.11",
         "doctrine/doctrine-bundle": "^1.6",
         "doctrine/orm": "^2.5",
         "easycorp/easyadmin-bundle": "^1.17",
@@ -28,7 +28,6 @@
         "liuggio/excelbundle": "^2.1",
         "sensio/distribution-bundle": "^5.0.19",
         "sensio/framework-extra-bundle": "^5.0.0",
-        "sentry/sentry-symfony": "^2.0",
         "smalot/pdfparser": "^0.11.0",
         "symfony/assetic-bundle": "^2.8",
         "symfony/monolog-bundle": "^3.1.0",
