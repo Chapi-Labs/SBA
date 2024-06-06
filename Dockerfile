@@ -49,7 +49,12 @@ RUN chown -R www-data:www-data /var/www/html && chmod -R 755 /var/www/html
 # Optimize Composer for production
 RUN composer install --optimize-autoloader --no-interaction
 
-# ENV PHP_MEMORY_LIMIT=512M
+# Create a custom php.ini file to increase memory limit and file upload size
+RUN echo "memory_limit=512M" > /usr/local/etc/php/conf.d/custom.ini \
+    && echo "max_file_uploads=1000" >> /usr/local/etc/php/conf.d/custom.ini \
+    && echo "upload_max_filesize=500M" >> /usr/local/etc/php/conf.d/custom.ini \
+    && echo "max_execution_time=180" >> /usr/local/etc/php/conf.d/custom.ini \
+    && echo "post_max_size=500M" >> /usr/local/etc/php/conf.d/custom.ini
 
 # Expose port 80
 EXPOSE 80
