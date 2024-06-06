@@ -110,7 +110,7 @@ class DefaultController extends Controller
                 if ($columna === sizeof($row) - 1 && $count !== 0 && !empty($pdfs)) {
                     $pdfsWithEmail['cliente'] = $cliente;
                     $pdfsWithEmail['pdf'] = $pdfs;
-                    $pdfsWithEmail['nit'] = strval($nit);
+                    $pdfsWithEmail['nit'] = strtoupper(strval($nit));
                     $pdfsWithEmail['emails'] = $emails;
                     $clientsPDF[] = $pdfsWithEmail;
                 }
@@ -137,7 +137,7 @@ class DefaultController extends Controller
             $fileName = $pdf->getClientOriginalName();
             //convert number to string: strval
             //find if file name includes nits
-            if (strpos($fileName, strval($nit)) !== false) {
+            if (strpos(strtoupper($fileName), strtoupper(strval($nit))) !== false) {
                 $result[] = $pdf;
             }
         }

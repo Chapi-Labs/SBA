@@ -68,4 +68,4 @@ swiftmailer:
     encryption: tls
     spool: { type: memory }
 sentry:
-    dsn: "https://67b84d5732e44373896ede7f0ac2318c:4550d1f37e6d480fa9c2ede7ad9e0fed@sentry.io/295411"
+    dsn: '%sentry_dsn%'

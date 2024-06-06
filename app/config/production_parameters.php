@@ -6,3 +6,4 @@
     $container->setParameter('mailer_host', getenv('MAILER_HOST'));
     $container->setParameter('mailer_user', getenv('MAILER_USER'));
     $container->setParameter('mailer_password', getenv('MAILER_PASSWORD'));
+    $container->setParameter('sentry_dsn', getenv('SENTRY_DSN'));

@@ -49,6 +49,8 @@ RUN chown -R www-data:www-data /var/www/html && chmod -R 755 /var/www/html
 # Optimize Composer for production
 RUN composer install --optimize-autoloader --no-interaction
 
+# ENV PHP_MEMORY_LIMIT=512M
+
 # Expose port 80
 EXPOSE 80
 
