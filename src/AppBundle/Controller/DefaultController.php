@@ -171,7 +171,7 @@ class DefaultController extends Controller
             ->setFrom([$fromEmail => 'SBA'])
             ->setTo($emailTo)
             ->setReplyTo('lsaravia@sbasite.com')
-            ->setBcc('lsaravia@sbasite.com')
+            ->setCc('lsaravia@sbasite.com')
             ->setBody($this->renderView('email/email.html.twig', [ 'body' => ($body)]), 'text/html')
             ->setContentType('text/html')
         ;
